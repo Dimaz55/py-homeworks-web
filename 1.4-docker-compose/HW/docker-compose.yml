@@ -1,0 +1,45 @@
+version: "3.3"
+
+networks:
+  hw1.4_net:
+
+volumes:
+  pgdata:
+  static:
+  
+services:
+  postgresdb:
+    image: postgres:latest
+    env_file: .env
+    volumes:
+      - .:/pgdata
+    networks:
+      - hw1.4_net
+    ports:
+      - "6432:5432"
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: .
+    env_file: .env
+    entrypoint: /stocks_products/api_entrypoint.sh
+    volumes:
+      - static:/stocks_products/static/
+    networks:
+      - hw1.4_net
+    depends_on:
+      - postgresdb
+  
+  nginx:
+    build: ./nginx/
+    volumes:
+      - static:/home/static/
+    depends_on:
+      - api
+    networks:
+      - hw1.4_net
+    ports:
+      - "8000:80"
+
