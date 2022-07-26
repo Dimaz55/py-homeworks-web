@@ -10,9 +10,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 BASE_URL = 'https://swapi.dev/api/people/'
-PG_DSN = 'sqlite+aiosqlite:///swapi.db'
+DB_DSN = 'sqlite+aiosqlite:///swapi.db'
 BaseModel = declarative_base()
-engine = create_async_engine(PG_DSN)
+engine = create_async_engine(DB_DSN)
 
 
 class StarWarsPerson(BaseModel):
